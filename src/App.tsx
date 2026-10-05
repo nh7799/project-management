@@ -207,7 +207,7 @@ function Shell() {
       </nav>
 
       <main className="app-main">
-        <motion.div key={loc.pathname} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, ease: 'easeOut' }}>
+        <motion.div key={loc.pathname} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.12 }}>
           <Suspense fallback={<div role="status" aria-live="polite" className="muted" style={{padding:"2rem"}}>Loading this page…</div>}>
 <Routes location={loc}>
             <Route path="/" element={<Navigate to="/home" />} />

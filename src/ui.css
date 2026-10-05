@@ -1,0 +1,90 @@
+/* ===== Mission Control design layer: calm, consistent, precise =====
+   Loaded after index.css. Uses the existing theme variables, so all 4 themes still work.
+   Rules: 4px spacing scale, 1 radius, 1px borders, no gradients, no hover movement,
+   one accent, 16px+ text, 48px touch targets, nothing wider than the screen. */
+:root{
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;
+  --r:12px;--radius:12px;--radius-sm:10px;--pad:16px;--lh:1.6;
+  --tap:48px;--content:960px;--nav-h:64px;
+}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:72px}
+html,body{max-width:100%;overflow-x:clip}
+body{font-size:1rem;line-height:1.6;letter-spacing:0;-webkit-font-smoothing:antialiased}
+*,*::before,*::after{min-width:0}
+p,li,td,th,h1,h2,h3,h4,.card,.label{overflow-wrap:anywhere}
+img,svg,video,canvas{max-width:100%;height:auto}
+
+/* Calm: remove movement, glow, gradients, decoration */
+.lift,.pulse,.pop,.btn:hover,.card:hover,.touch-card:hover{transform:none!important;animation:none!important;filter:none}
+.scanlines,.hero::after{display:none!important}
+.hero{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:var(--r);padding:var(--s4) var(--s5)}
+.hero *{color:inherit}
+.card,.card-soft,.stat-card,.touch-card,.next-action-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:none;padding:var(--s4)}
+.card-soft{background:var(--surface2)}
+.next-action-card{border-left:4px solid var(--accent)}
+
+/* Predictable vertical rhythm */
+.app-main{max-width:calc(var(--content) + 48px);margin-inline:auto;padding:var(--s4) var(--s4) calc(var(--nav-h) + var(--s6) + env(safe-area-inset-bottom))}
+.app-main>div>*+*,.stack>*+*{margin-top:var(--s4)}
+.grid-2,.grid-3,.grid-4,.health-grid{display:grid;gap:var(--s3);grid-template-columns:1fr}
+@media(min-width:640px){.grid-2,.grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}.app-main{padding:var(--s5) var(--s5) var(--s6)}}
+@media(min-width:1024px){.grid-3{grid-template-columns:repeat(3,1fr)}.grid-4{grid-template-columns:repeat(4,1fr)}}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2)}
+
+/* One heading scale */
+.htitle{font-size:1.5rem;line-height:1.25;font-weight:700;margin:0}
+.htitle.sm{font-size:1.125rem}
+.hsection{font-size:.8125rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:var(--s5) 0 var(--s2)}
+.muted,.label,.tiny{color:var(--muted)}
+.tiny{font-size:.875rem}  /* never below 14px */
+.stat-value{font-size:1.5rem;font-weight:700;line-height:1.2}
+.stat-label{font-size:.875rem;color:var(--muted)}
+
+/* Controls: same size, same shape, same behaviour everywhere */
+.btn,.icon-btn,.input,select.input,textarea.input,.tabs button,.chip{min-height:var(--tap);border-radius:var(--radius-sm)}
+.btn{box-shadow:none;transition:background-color .15s,border-color .15s}
+.btn.sm{min-height:44px;padding:var(--s2) var(--s3);font-size:.9375rem}
+.btn.big{min-height:56px;font-size:1rem;width:100%}
+@media(min-width:640px){.btn.big{width:auto}}
+.input,select.input,textarea.input{font-size:1rem;border-width:1px;padding:var(--s3)}
+textarea.input{min-height:120px;line-height:1.5}
+.pill,.chip,.phase-badge{font-size:.875rem;padding:2px var(--s3);border-radius:999px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);font-weight:600}
+.chip{min-height:44px;display:inline-flex;align-items:center}
+.badge-count{display:none}  /* fewer numbers competing for attention */
+.divider{border:0;border-top:1px solid var(--line);margin:var(--s4) 0}
+
+/* Focus: always visible, never colour-only */
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+a,button,[role=button]{-webkit-tap-highlight-color:transparent}
+
+/* Icons: quiet by default, so labels carry the meaning */
+.emoji{filter:grayscale(1);opacity:.75;font-size:1.15rem;line-height:1}
+.active .emoji,.nav-item:hover .emoji{filter:none;opacity:1}
+
+/* Sidebar (desktop) */
+.nav-desktop .nav-item{min-height:44px;border-radius:var(--radius-sm);padding:var(--s2) var(--s3);display:flex;align-items:center;gap:var(--s3);border:1px solid transparent}
+.nav-desktop .nav-item.active{background:var(--surface2);border-color:var(--line);font-weight:700}
+
+/* Phone: bottom navigation, 5 equal 48px+ targets, safe areas */
+.topbar{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line);padding:var(--s2) var(--s4);padding-top:calc(var(--s2) + env(safe-area-inset-top))}
+.bottom-nav{position:fixed;inset:auto 0 0 0;z-index:40;display:grid;grid-template-columns:repeat(5,1fr);height:calc(var(--nav-h) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:var(--surface);border-top:1px solid var(--line)}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:var(--nav-h);font-size:.75rem;font-weight:600;color:var(--muted);text-decoration:none;border-top:3px solid transparent}
+.bnav-btn.active{color:var(--ink);border-top-color:var(--accent)}
+.fab{bottom:calc(var(--nav-h) + var(--s4) + env(safe-area-inset-bottom))!important;right:var(--s4)}
+
+/* Overlays become full-screen sheets on phones */
+@media(max-width:639px){
+  .modal{position:fixed;inset:0;max-width:none;width:100%;height:100%;border-radius:0;overflow-y:auto;padding-bottom:calc(var(--s6) + env(safe-area-inset-bottom))}
+  .tabs,.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{display:block;overflow-x:auto}
+}
+@media(max-width:359px){.htitle{font-size:1.25rem}.app-main{padding-inline:var(--s3)}.bnav-btn{font-size:.6875rem}}
+@media(min-width:768px){.bottom-nav{display:none}.app-main{padding-bottom:var(--s6)}}
+@media(min-width:1600px){:root{--content:1120px}}
+
+/* Progress: shape + text, not colour alone */
+.health-bar-wrap,.bar{height:10px;border-radius:999px;background:var(--surface3);overflow:hidden}
+.health-bar-fill{height:100%;border-radius:inherit;transition:width .3s}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-contrast:more){.card,.btn.ghost,.input{border-width:2px}}

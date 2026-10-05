@@ -10,6 +10,8 @@ const STATUSES = ['upcoming','held','archived'] as const
 export default function Meetings() {
   const { rows: meetings, loading, error, add, update, remove } = useRows<Meeting>('meetings')
   const [tab, setTab] = useState<Meeting['status']>('upcoming')
+  const [notice, setNotice] = useState('')
+  const say = (m: string) => { setNotice(m); window.setTimeout(() => setNotice(''), 4000) }
 
   const filtered = useMemo(() => meetings.filter(m => m.status === tab).sort((a,b) =>
     (a.meeting_date || '').localeCompare(b.meeting_date || '')
@@ -85,12 +87,14 @@ export default function Meetings() {
         },
       })
     }
-    alert('Journal entry auto-generated from meeting record ✅')
+    say('Journal entry created from this meeting record.')
   }
 
   if (error) return <Err e={error} />
 
   return (
+    <>
+      <div role="status" aria-live="polite" className="tiny" style={{minHeight:'1.2rem',padding:'0 .25rem'}}>{notice}</div>
     <div className="stack">
       <Title
         eyebrow="§33 Supervisor & Team Meetings"
@@ -183,7 +187,7 @@ export default function Meetings() {
                     <>
                       <button className="btn ghost sm" onClick={() => {
                         void navigator.clipboard?.writeText(generateBrief(m))
-                        alert('📋 Meeting brief copied to clipboard (paste into editor/email)')
+                        say('Meeting brief copied. You can paste it into an email or your notes.')
                       }}>📋 Copy brief</button>
                       <button className="btn sm" onClick={() => void update(m.id, { status: 'held', meeting_date: new Date().toISOString().slice(0,10) })}>
                         ✓ Mark held
@@ -248,5 +252,6 @@ export default function Meetings() {
         </motion.div>}
       </Card>
     </div>
+    </>
   )
 }

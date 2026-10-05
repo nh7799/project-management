@@ -1,31 +1,31 @@
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { BrowserRouter, NavLink, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { MotionConfig, motion } from 'framer-motion'
 import type { Session } from '@supabase/supabase-js'
 import { configured, supabase, ensureProfile } from './lib/supabase'
 import { SettingsProvider, useSettings } from './lib/settings'
 import Palette from './components/Palette'
-import Home from './pages/Home'
-import Today from './pages/Today'
-import Tasks from './pages/Tasks'
-import Timeline from './pages/Timeline'
-import Handbook from './pages/Handbook'
-import Projects from './pages/Projects'
-import Decisions from './pages/Decisions'
-import Blockers from './pages/Blockers'
-import SettingsPage from './pages/Settings'
-import Project from './pages/Project'
-import Evidence from './pages/Evidence'
-import Research from './pages/Research'
-import Journal from './pages/Journal'
-import Meetings from './pages/Meetings'
-import Risks from './pages/Risks'
-import Report from './pages/Report'
-import Profile from './pages/Profile'
-import More from './pages/More'
+const Home = lazy(() => import('./pages/Home'))
+const Today = lazy(() => import('./pages/Today'))
+const Tasks = lazy(() => import('./pages/Tasks'))
+const Timeline = lazy(() => import('./pages/Timeline'))
+const Handbook = lazy(() => import('./pages/Handbook'))
+const Projects = lazy(() => import('./pages/Projects'))
+const Decisions = lazy(() => import('./pages/Decisions'))
+const Blockers = lazy(() => import('./pages/Blockers'))
+const SettingsPage = lazy(() => import('./pages/Settings'))
+const Project = lazy(() => import('./pages/Project'))
+const Evidence = lazy(() => import('./pages/Evidence'))
+const Research = lazy(() => import('./pages/Research'))
+const Journal = lazy(() => import('./pages/Journal'))
+const Meetings = lazy(() => import('./pages/Meetings'))
+const Risks = lazy(() => import('./pages/Risks'))
+const Report = lazy(() => import('./pages/Report'))
+const Profile = lazy(() => import('./pages/Profile'))
+const More = lazy(() => import('./pages/More'))
 import Auth from './pages/Auth'
-import Checklist from './pages/Checklist'
-import Guide from './pages/Guide'
+const Checklist = lazy(() => import('./pages/Checklist'))
+const Guide = lazy(() => import('./pages/Guide'))
 import type { Task, Decision, Blocker } from './types'
 import { AddForm, Modal } from './components/ui'
 
@@ -208,7 +208,8 @@ function Shell() {
 
       <main className="app-main">
         <motion.div key={loc.pathname} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, ease: 'easeOut' }}>
-          <Routes location={loc}>
+          <Suspense fallback={<div role="status" aria-live="polite" className="muted" style={{padding:"2rem"}}>Loading this page…</div>}>
+<Routes location={loc}>
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={<Home />} />
             <Route path="/today" element={<Today />} />
@@ -232,6 +233,7 @@ function Shell() {
             <Route path="/more" element={<More />} />
             <Route path="*" element={<Navigate to="/home" />} />
           </Routes>
+</Suspense>
         </motion.div>
       </main>
 

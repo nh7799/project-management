@@ -11,4 +11,6 @@ Vite + React + TypeScript + Tailwind + Supabase, deployable on Vercel.
 
 ## Vercel
 Push to GitHub → import in Vercel (Vite preset) → add the two env vars under Settings → Environment Variables → deploy. `vercel.json` rewrites all routes to `index.html`, so refreshing `/timeline` etc. works.
-# project-management
+
+## Upgrade note
+Run `supabase/migrations/0002_guide.sql` after `0001_core.sql` (guided-journey progress).

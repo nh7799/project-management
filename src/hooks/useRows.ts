@@ -12,6 +12,6 @@ export function useRows<T extends { id: string }>(table: string, order = 'create
   const run = async (p: PromiseLike<{ error: { message: string } | null }>) => { const { error } = await p; setError(error ? error.message : null); await load() }
   const add = (v: Record<string, unknown>) => run(supabase.from(table).insert(v))
   const update = (id: string, v: Record<string, unknown>) => run(supabase.from(table).update(v).eq('id', id))
-  const remove = (id: string) => confirm('Delete this record?') ? run(supabase.from(table).delete().eq('id', id)) : Promise.resolve()
+  const remove = (id: string, ask = true) => (!ask || confirm('Delete this record?')) ? run(supabase.from(table).delete().eq('id', id)) : Promise.resolve()
   return { rows, loading, error, add, update, remove }
 }

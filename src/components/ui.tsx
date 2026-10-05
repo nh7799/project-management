@@ -349,11 +349,25 @@ export const Tag = ({ children, tone, sm, kind, className, style, ...rest }: {
 }
 
 // ─── Project status line ──────────────────────────────────────
-export const StatusLine = ({ status, reason }: { status: 'On track' | 'Needs attention' | 'At risk' | string; reason?: string }) => {
-  const tone: Record<string, string> = { 'On track': 'good', 'Needs attention': 'warn', 'At risk': 'danger' }
-  const icon: Record<string, string> = { 'On track': '🟢', 'Needs attention': '🟡', 'At risk': '🔴' }
-  const t = tone[status] ?? 'acc'
-  const i = icon[status] ?? 'ℹ️'
+export const StatusLine = ({ status, reason }: { status: any; reason?: string }) => {
+  const statusStr = typeof status === 'object' && status !== null
+    ? String(status.label || status.summary || 'Project active')
+    : String(status || 'Project active')
+  const statusTone = typeof status === 'object' && status !== null && status.tone
+    ? String(status.tone)
+    : undefined
+  const toneMap: Record<string, string> = {
+    'On track': 'good', 'Healthy': 'good', 'Thriving': 'good',
+    'Needs attention': 'warn', 'Stalling': 'warn',
+    'At risk': 'danger', 'Needs urgent triage': 'danger',
+  }
+  const iconMap: Record<string, string> = {
+    'On track': '🟢', 'Healthy': '🟢', 'Thriving': '🚀',
+    'Needs attention': '🟡', 'Stalling': '⚠️',
+    'At risk': '🔴', 'Needs urgent triage': '🚨',
+  }
+  const t = statusTone ?? toneMap[statusStr] ?? 'acc'
+  const i = iconMap[statusStr] ?? 'ℹ️'
   return (
     <div className="card">
       <div className="row between wrap gap-2">
@@ -361,10 +375,10 @@ export const StatusLine = ({ status, reason }: { status: 'On track' | 'Needs att
           <span className="status-dot" style={{ background: `var(--${t})` }} />
           <div>
             <div className="label">Project status</div>
-            <div className="htitle sm">{status}</div>
+            <div className="htitle sm">{statusStr}</div>
           </div>
         </div>
-        <Tag tone={t as any}>{i} {status}</Tag>
+        <Tag tone={t as any}>{i} {statusStr}</Tag>
       </div>
       {reason && <p className="muted sm mt-2">{reason}</p>}
     </div>

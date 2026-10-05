@@ -15,3 +15,6 @@ export function AddForm({ fields, onAdd, label = 'Add' }: { fields: F[]; onAdd: 
         : <input className="input" type={f.type ?? 'text'} required={f.required} value={v[f.name] ?? ''} onChange={e => setV({ ...v, [f.name]: e.target.value })} />}</label>)}
     <button className="btn sm:col-span-2">{label}</button></form>
 }
+import { motion } from 'framer-motion'
+export const Bar = ({ pct }: { pct: number }) => <div className="bar"><motion.i initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 0.7, ease: 'easeOut' }} /></div>
+export const stagger = (i: number) => ({ initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, transition: { delay: Math.min(i, 12) * 0.03, duration: 0.25 } })

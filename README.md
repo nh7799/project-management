@@ -14,3 +14,6 @@ Push to GitHub → import in Vercel (Vite preset) → add the two env vars under
 
 ## Upgrade note
 Run `supabase/migrations/0002_guide.sql` after `0001_core.sql` (guided-journey progress).
+
+## v3
+New: Handbook, Checklist, Project library, search palette (Ctrl+K). No new migration needed beyond 0001 and 0002.

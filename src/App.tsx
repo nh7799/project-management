@@ -145,7 +145,7 @@ function TopBar({ onPalette, onCapture, profileTitle, signOut }: { onPalette: ()
         <div className="small muted">{profileTitle || 'Final-Year Project OS'}</div>
       </div>
       <button className="pill sm" onClick={onPalette} title="Search everything (Ctrl+K)">🔍 <span className="small hidden sm:inline">Search</span> <span className="kbd hidden sm:inline">Ctrl K</span></button>
-      <button className="btn sm" onClick={onCapture}>＋ Capture</button>
+      <button className="btn sm" onClick={onCapture}>＋ Add</button>
       <button className="icon-btn" aria-label="Sign out" onClick={signOut} title="Sign out">⎋</button>
     </div>
   )
@@ -158,7 +158,7 @@ function Shell() {
   const { s } = useSettings()
   const nav = useNavigate()
 
-  const { rows: profiles } = useMini<any>('profiles')
+  const { rows: profiles, error: dbError } = useMini<any>('profiles')
   const profile = profiles[0]
 
   useEffect(() => {
@@ -171,6 +171,23 @@ function Shell() {
 
   const signOut = async () => {
     if (confirm('Sign out of Mission Control?')) await supabase.auth.signOut()
+  }
+
+  if (dbError && /schema cache|does not exist|profiles/i.test(String(dbError))) {
+    return (
+      <main className="app-main" style={{ marginLeft: 0, maxWidth: 640, margin: '0 auto' }}>
+        <div className="card">
+          <h1 className="htitle">One-time database setup needed</h1>
+          <p className="muted">Your Supabase project does not have the app's tables yet. Nothing is wrong with your account or data.</p>
+          <ol>
+            <li>Open your Supabase project and choose <b>SQL Editor</b>.</li>
+            <li>Open the file <b>supabase/setup_all.sql</b> from this project and paste all of it in.</li>
+            <li>Press <b>Run</b>, wait for "Success", then refresh this page.</li>
+          </ol>
+          <button className="btn big" onClick={() => window.location.reload()}>I have run it – check again</button>
+        </div>
+      </main>
+    )
   }
 
   return (

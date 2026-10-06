@@ -88,3 +88,34 @@ a,button,[role=button]{-webkit-tap-highlight-color:transparent}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 @media(prefers-contrast:more){.card,.btn.ghost,.input{border-width:2px}}
+
+/* ===== Layout fixes (found by rendering at 390px and 1280px) ===== */
+.fab{display:none!important}                       /* duplicated "Capture"; one way to add things */
+.hero h1,.hero .htitle{font-size:1.25rem!important;line-height:1.35;font-weight:700!important}
+.hero p{margin:var(--s1) 0 0}
+.hero>.small{color:var(--muted)}
+
+/* Top bar: one row, never wraps */
+.topbar{display:flex;flex-wrap:nowrap;align-items:center;gap:var(--s2);min-height:56px}
+.topbar .col{flex:1;min-width:0}
+.topbar .col .htitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:1rem}
+.topbar .col .small{display:none}
+.topbar .pill{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm)}
+.topbar .btn.sm,.topbar .icon-btn{flex-shrink:0;white-space:nowrap}
+.topbar .icon-btn{width:44px;height:44px}
+
+/* Bottom nav: no boxed buttons, just a top marker on the active item */
+.bnav-btn,.bnav-btn.active,.bnav-btn:hover{background:transparent;border:0;border-radius:0}
+.bnav-btn{border-top:3px solid transparent;padding:var(--s2) 0}
+.bnav-btn.active{border-top:3px solid var(--accent);color:var(--ink)}
+.bnav-btn .emoji{font-size:1.25rem}
+
+/* Desktop: sidebar is a fixed column; the page sits beside it, never under it */
+@media(min-width:768px){
+  .topbar{margin-left:260px;padding-left:var(--s5);padding-right:var(--s5);justify-content:flex-end}
+  .topbar .col{display:none}
+  .app-main{margin-left:260px;max-width:none;padding:var(--s5) var(--s5) var(--s6)}
+  .app-main>div{max-width:var(--content);margin-inline:auto}
+  .nav-desktop{display:flex;flex-direction:column;width:260px;padding:var(--s4);gap:var(--s1);background:var(--surface);border-right:1px solid var(--line)}
+  .nav-desktop .nav-item{white-space:normal;line-height:1.3}
+}

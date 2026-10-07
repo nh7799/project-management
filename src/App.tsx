@@ -5,6 +5,7 @@ import type { Session } from '@supabase/supabase-js'
 import { configured, supabase, ensureProfile } from './lib/supabase'
 import { SettingsProvider, useSettings } from './lib/settings'
 import Palette from './components/Palette'
+import SaveStatus from './components/SaveStatus'
 const Home = lazy(() => import('./pages/Home'))
 const Today = lazy(() => import('./pages/Today'))
 const Tasks = lazy(() => import('./pages/Tasks'))
@@ -224,6 +225,7 @@ function Shell() {
       </nav>
 
       <main className="app-main">
+        <SaveStatus />
         <motion.div key={loc.pathname} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.12 }}>
           <Suspense fallback={<div role="status" aria-live="polite" className="muted" style={{padding:"2rem"}}>Loading this page…</div>}>
 <Routes location={loc}>

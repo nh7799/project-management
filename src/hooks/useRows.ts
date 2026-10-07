@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { saveStatus } from '../lib/saveStatus'
 
 export interface ExtraFilter {
   eq?: [string, unknown]
@@ -54,10 +55,15 @@ export function useRows<T extends { id: string }>(
   }, [table])
 
   const run = async (p: PromiseLike<{ error: { message: string } | null }>) => {
+    saveStatus.saving()
     try {
       const { error } = await p
       setError(error ? error.message : null)
-    } catch (e: any) { setError(e?.message ?? 'db call failed') }
+      if (error) saveStatus.failed(error.message); else saveStatus.saved()
+    } catch (e: any) {
+      const m = e?.message ?? 'db call failed'
+      setError(m); saveStatus.failed(m)
+    }
     await load()
   }
 
